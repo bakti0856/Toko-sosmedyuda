@@ -22,7 +22,7 @@ style.innerHTML = `
   padding: 25px 35px;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.35);
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   font-weight: bold;
   z-index: 9999;
   opacity: 0;
@@ -31,7 +31,9 @@ style.innerHTML = `
   width: 400px;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: center; /* center horizontal */
+  justify-content: center; /* center vertical */
+  text-align: center; /* teks di tengah */
 }
 .news-popup.show {
   opacity: 1;
@@ -42,6 +44,7 @@ style.innerHTML = `
   font-size: 1.5rem;
   font-weight: bold;
   color: #333;
+  align-self: flex-end;
   transition: color 0.3s, transform 0.2s;
 }
 .news-popup .close-btn:hover {
@@ -49,9 +52,7 @@ style.innerHTML = `
   transform: scale(1.2);
 }
 .news-popup .news-text {
-  flex: 1;
-  text-align: left;
-  margin-bottom: 10px;
+  margin-top: 10px;
 }
 @media (max-width: 768px) {
   .news-popup {
@@ -85,7 +86,7 @@ function showNewsPopup(text) {
   box.className = 'news-popup';
   box.innerHTML = `
     <span class="close-btn">&times;</span>
-    <div class="news-text">📰 <b>Berita:</b> ${text}</div>
+    <div class="news-text">${text}</div>
   `;
 
   document.body.appendChild(box);
