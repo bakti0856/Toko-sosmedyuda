@@ -10,60 +10,97 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
-  // ================= Popup Berita =================
+  // ================= Popup Berita Modern =================
   async function getNews() {
     try {
       const res = await fetch("/api/berita");
       if (!res.ok) throw new Error("Gagal ambil data berita");
-
       const data = await res.json();
-
       if (data?.pesan) showNewsPopup(data.pesan);
     } catch (err) {
       console.error('❌ Tidak bisa ambil berita:', err);
     }
   }
 
-  // Jalankan saat halaman load
   getNews();
-
-  // Cek berita baru tiap 30 detik
   setInterval(getNews, 30000);
 });
 
-// ================= Fungsi showNewsPopup =================
+// ================= Fungsi showNewsPopup Modern Premium =================
 function showNewsPopup(text) {
+  if (document.querySelector('.news-popup')) return;
+
+  // ====== BACKDROP BLUR ======
+  const backdrop = document.createElement('div');
+  backdrop.className = 'popup-backdrop';
+  Object.assign(backdrop.style, {
+    position: 'fixed',
+    top: '0', left: '0',
+    width: '100%', height: '100%',
+    background: 'rgba(0,0,0,0.2)',
+    backdropFilter: 'blur(4px)',
+    zIndex: '9998',
+    opacity: '0',
+    transition: 'opacity 0.4s ease'
+  });
+  document.body.appendChild(backdrop);
+  setTimeout(() => backdrop.style.opacity = '1', 50);
+
+  // ====== POPUP ======
   const box = document.createElement('div');
   box.className = 'news-popup';
-  box.innerHTML = `📰 <b>Berita:</b> ${text}`;
+  box.innerHTML = `
+    <div style="display:flex; align-items:center; gap:15px; flex:1;">
+      <span style="font-size:2rem;">🚀</span>
+      <span style="flex:1; font-weight:600; font-size:1rem;">📰 <b>Berita:</b> ${text}</span>
+    </div>
+    <button class="popup-close">&times;</button>
+  `;
 
-  // Styling popup
   Object.assign(box.style, {
     position: 'fixed',
     top: '20px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    background: '#fffae6',
-    color: '#222',
-    border: '1px solid #ffd700',
-    padding: '15px 25px',
+    right: '-450px', // slide dari kanan
+    background: 'linear-gradient(135deg, #ff416c, #ff4b2b)',
+    color: '#fff',
     borderRadius: '12px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
+    padding: '15px 20px',
+    boxShadow: '0 6px 25px rgba(0,0,0,0.35)',
     fontSize: '1rem',
-    fontWeight: 'bold',
+    fontWeight: '600',
     zIndex: '9999',
+    minWidth: '320px',
+    maxWidth: '450px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
     opacity: '0',
-    transition: 'opacity 0.5s ease'
+    transition: 'right 0.5s ease, opacity 0.5s ease'
   });
 
   document.body.appendChild(box);
 
-  // Animasi masuk
-  setTimeout(() => (box.style.opacity = '1'), 200);
-
-  // Animasi keluar setelah 8 detik
-  setTimeout(() => {
+  // Tombol close
+  const closePopup = () => {
+    box.style.right = '-450px';
     box.style.opacity = '0';
-    setTimeout(() => box.remove(), 500);
+    backdrop.style.opacity = '0';
+    setTimeout(() => {
+      box.remove();
+      backdrop.remove();
+    }, 500);
+  };
+  box.querySelector('.popup-close').addEventListener('click', closePopup);
+  backdrop.addEventListener('click', closePopup);
+
+  // Animasi masuk
+  setTimeout(() => {
+    box.style.right = '20px';
+    box.style.opacity = '1';
+  }, 100);
+
+  // Auto close setelah 8 detik
+  setTimeout(() => {
+    if (document.body.contains(box)) closePopup();
   }, 8000);
 }
