@@ -4,32 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Toko Suntik Sosmed</title>
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <header>
-        <h1>Toko Suntik Sosmed</h1>
-        <p>Layanan boosting sosial media terbaik!</p>
+         <nav class="navbar">
+    <div class="logo">
+    <img src="./fotolist/logo.jpg" alt="logo yuxdax official">
+    <span>Toko Yuda</span>
+    </div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Beranda</a></li>
+      <li><a href="#tentang">Tentang</a></li>
+      <li><a href="#kontak">Kontak</a></li>
+    </ul>
+    <div class="menu-toggle" id="menuToggle">&#9776;</div>
+    </nav>
+    <script> const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+    });</script>
     </header>
     <div class="container">
         <h2>Produk Kami yang populer 🔥</h2>
         <div class="product">
             <div class ="product-item fade-in">
-                <img src="/fotolist/tiktok_list.jpg" alt="Tiktok List">
+                <img src="./fotolist/tiktok_list.jpg" alt="Tiktok List">
                 <h3>Layanan suntik Titok</h3>
                 <p>Harga: Rp 1000 sampai 35.000</p>
                 <p>Tingkatkan Kulaitas akun Tiktok anda dengan menggunakan jasa layanan kami</p>
                 <a href="https://wa.me/628514111025?text=Halo,%20saya%20ingin%20order%20Boost%20Followers%20Tiktok" class="order-btn">Order via WhatsApp</a>
             </div>
             <div class="product-item fade-in">
-                <img src="/fotolist/instagram_list.jpg" alt="Boost Instagram">
+                <img src="./fotolist/instagram_list.jpg" alt="Boost Instagram">
                 <h3>Layanan suntik instagram</h3>
                 <p>Harga: Rp 2.500 sampai 85.000</p>
                 <p>Tingkatkan Kulaitas akun Instagram anda dengan menggunakan jasa layanan kami</p>
                 <a href="https://wa.me/6285141110285?text=Halo,%20saya%20ingin%20order%20Boost%20Instagram" class="order-btn">Order via WhatsApp</a>
             </div>
             <div class="product-item fade-in">
-                <img src="/fotolist/amprem_list.jpg" alt="List amprem">
+                <img src="./fotolist/amprem_list.jpg" alt="List amprem">
                 <h3>Alight Motion prem 1 tahun</h3>
                 <p>Harga : Rp 10.000</p>
                 <p>dapatkan alight motion premium 1 tahun dengan murah dan aman</p>
@@ -41,34 +57,49 @@
     <div class="container">
         <h2>Produk Kami </h2>
         <div class="product">
+             <div class ="product-item fade-in">
+                <img src="./fotolist/tiktok_list.jpg" alt="Tiktok List">
+                <h3>Layanan suntik Titok</h3>
+                <p>Harga: Rp 1000 sampai 35.000</p>
+                <p>Tingkatkan Kulaitas akun Tiktok anda dengan menggunakan jasa layanan kami</p>
+                <a href="https://wa.me/628514111025?text=Halo,%20saya%20ingin%20order%20Boost%20Followers%20Tiktok" class="order-btn">Order via WhatsApp</a>
+            </div>
+            <div class="product-item fade-in">
+                <img src="./fotolist/instagram_list.jpg" alt="Boost Instagram">
+                <h3>Layanan suntik instagram</h3>
+                <p>Harga: Rp 2.500 sampai 85.000</p>
+                <p>Tingkatkan Kulaitas akun Instagram anda dengan menggunakan jasa layanan kami</p>
+                <a href="https://wa.me/6285141110285?text=Halo,%20saya%20ingin%20order%20Boost%20Instagram" class="order-btn">Order via WhatsApp</a>
+            </div>
+            <div class="product-item fade-in">
+                <img src="./fotolist/amprem_list.jpg" alt="List amprem">
+                <h3>Alight. Motion prem 1 tahun</h3>
+                <p>Harga : Rp 10.000</p>
+                <p>dapatkan alight motion premium 1 tahun dengan murah dan aman</p>
+                <a href="https://wa.me/6285141110285?text=Halo,%20saya%20ingin%20order%20alight%20motion%20prem" class="order-btn">Order via WhatsApp</a>
+            </div>
+            
             <div class ="product-item fade-in">
-                <img src="/fotolist/websitetraffic_list.jpg" alt="web traffic">
+                <img src="./fotolist/websitetraffic_list.jpg" alt="web traffic">
                 <h3>Pengunjung situs web</h3>
                 <p>Harga: Rp 3.000 sampai 13.000</p>
                 <p>Tingkatkan Pengunjung website anda dengan jasa layanan kami</p>
                 <a href="https://wa.me/6285141110285?text=Halo,%20saya%20ingin%20order%20pengnjung%20website" class="order-btn">Order via WhatsApp</a>
             </div>
             <div class="product-item fade-in">
-                <img src="/fotolist/facebook_list.jpg" alt="Facebook list">
+                <img src="./fotolist/facebook_list.jpg" alt="Facebook list">
                 <h3>Layanan suntik facebook</h3>
                 <p>Harga: Rp 1.000 sampai 35.000</p>
                 <p>Tingkatkan dan ramaikan akun facebook anda dengan menggunakan jasa kami</p>
                 <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20order%20suntik%20faacebook" class="order-btn">Order via WhatsApp</a>
             </div>
             <div class="product-item fade-in">
-                <img src="/fotolist/whatsapp_list.jpg" alt="WhatsApp list">
+                <img src="./fotolist/whatsapp_list.jpg" alt="WhatsApp list">
                 <h3>Layanan suntik WhatsApp</h3>
                 <p>Harga: Rp 2.000 sampai 50.000</p>
                 <p>Tingkatkan saluran WhatsApp anda dengan menggunakan jasa layanan kami</p>
                 <a href="https://wa.me/6281234567890?text=Halo,%20saya%20ingin%20order%20Boost%20Followers%20TikTok%201000%20followers" class="order-btn">Order via WhatsApp</a>
             </div>
-        </div>
-    </div>
-
-    <div class="product-itemtext">
-        <h2>produk jasa lainya</h2>
-        <div class="product">
-            
         </div>
     </div>
     <footer>
