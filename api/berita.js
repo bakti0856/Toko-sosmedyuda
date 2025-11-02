@@ -1,71 +1,33 @@
-// ================= Fade-In Elemen =================
-document.addEventListener('DOMContentLoaded', () => {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+// Simpan sementara berita terbaru di RAM
+let beritaTerbaru = "Belum ada berita saat ini.";
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('fade-in');
-    });
-  }, observerOptions);
+export default async function handler(req, res) {
+  try {
+    if (req.method === "POST") {
+      // Ambil pesan dari body
+      const { pesan } = req.body;
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+      if (!pesan || pesan.trim() === "") {
+        return res.status(400).json({ error: "Pesan kosong" });
+      }
 
-  // ================= Popup Berita =================
-  async function getNews() {
-    try {
-      const res = await fetch("/api/berita");
-      if (!res.ok) throw new Error("Gagal ambil data berita");
-      const data = await res.json();
+      beritaTerbaru = pesan;
+      console.log("📰 Berita baru diterima:", pesan);
 
-      if (data?.pesan) showNewsPopup(data.pesan);
-    } catch (err) {
-      console.error('❌ Tidak bisa ambil berita:', err);
+      return res.status(200).json({ success: true, pesan });
     }
+
+    if (req.method === "GET") {
+      // Kirim berita terbaru
+      return res.status(200).json({ pesan: beritaTerbaru });
+    }
+
+    // Method lain tidak diizinkan
+    res.setHeader("Allow", ["GET", "POST"]);
+    return res.status(405).json({ error: `Metode ${req.method} tidak diizinkan` });
+
+  } catch (err) {
+    console.error("❌ Error API:", err);
+    return res.status(500).json({ error: "Terjadi kesalahan server" });
   }
-
-  // Jalankan pertama kali saat halaman load
-  getNews();
-
-  // Cek berita baru tiap 30 detik
-  setInterval(getNews, 30000);
-});
-
-// ================= Fungsi showNewsPopup =================
-function showNewsPopup(text) {
-  const box = document.createElement('div');
-  box.className = 'news-popup';
-  box.innerHTML = `📰 <b>Berita:</b> ${text}`;
-
-  // Styling popup
-  Object.assign(box.style, {
-    position: 'fixed',
-    top: '20px',
-    left: '50%',
-    transform: 'translateX(-50%)',
-    background: '#fffae6',
-    color: '#222',
-    border: '1px solid #ffd700',
-    padding: '15px 25px',
-    borderRadius: '12px',
-    boxShadow: '0 4px 10px rgba(0,0,0,0.2)',
-    fontSize: '1rem',
-    fontWeight: 'bold',
-    zIndex: '9999',
-    opacity: '0',
-    transition: 'opacity 0.5s ease'
-  });
-
-  document.body.appendChild(box);
-
-  // Animasi masuk
-  setTimeout(() => (box.style.opacity = '1'), 200);
-
-  // Animasi keluar setelah 8 detik
-  setTimeout(() => {
-    box.style.opacity = '0';
-    setTimeout(() => box.remove(), 500);
-  }, 8000);
 }

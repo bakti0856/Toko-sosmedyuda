@@ -1,44 +1,43 @@
-// === Efek Fade-In Elemen ===
+// ================= Fade-In Elemen =================
 document.addEventListener('DOMContentLoaded', () => {
-  const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-  };
+  const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
-      }
+      if (entry.isIntersecting) entry.target.classList.add('fade-in');
     });
   }, observerOptions);
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-});
 
-// === Popup Berita dari API ===
-document.addEventListener('DOMContentLoaded', async () => {
-  try {
-    // Pastikan endpoint cocok dengan API kamu
-    const res = await fetch('/api/berita');
-    const data = await res.json();
+  // ================= Popup Berita =================
+  async function getNews() {
+    try {
+      const res = await fetch("/api/berita");
+      if (!res.ok) throw new Error("Gagal ambil data berita");
 
-    if (data && data.berita) {
-      showNewsPopup(data.berita);
-    } else if (data && data.message) {
-      showNewsPopup(data.message);
+      const data = await res.json();
+
+      if (data?.pesan) showNewsPopup(data.pesan);
+    } catch (err) {
+      console.error('❌ Tidak bisa ambil berita:', err);
     }
-  } catch (err) {
-    console.error('❌ Tidak bisa ambil berita:', err);
   }
+
+  // Jalankan saat halaman load
+  getNews();
+
+  // Cek berita baru tiap 30 detik
+  setInterval(getNews, 30000);
 });
 
+// ================= Fungsi showNewsPopup =================
 function showNewsPopup(text) {
   const box = document.createElement('div');
   box.className = 'news-popup';
   box.innerHTML = `📰 <b>Berita:</b> ${text}`;
-  
-  // Gaya popup elegan
+
+  // Styling popup
   Object.assign(box.style, {
     position: 'fixed',
     top: '20px',
@@ -59,8 +58,10 @@ function showNewsPopup(text) {
 
   document.body.appendChild(box);
 
-  // Animasi masuk & keluar
-  setTimeout(() => box.style.opacity = '1', 200);
+  // Animasi masuk
+  setTimeout(() => (box.style.opacity = '1'), 200);
+
+  // Animasi keluar setelah 8 detik
   setTimeout(() => {
     box.style.opacity = '0';
     setTimeout(() => box.remove(), 500);
