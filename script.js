@@ -1,106 +1,103 @@
-// ================= Fade-In Elemen =================
+// === Fade-In Produk ===
 document.addEventListener('DOMContentLoaded', () => {
-  const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('fade-in');
     });
-  }, observerOptions);
+  }, { threshold: 0.1 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  // ================= Popup Berita Modern =================
-  async function getNews() {
-    try {
-      const res = await fetch("/api/berita");
-      if (!res.ok) throw new Error("Gagal ambil data berita");
-      const data = await res.json();
-      if (data?.pesan) showNewsPopup(data.pesan);
-    } catch (err) {
-      console.error('❌ Tidak bisa ambil berita:', err);
-    }
-  }
-
-  getNews();
-  setInterval(getNews, 30000);
 });
 
-// ================= Fungsi showNewsPopup Modern Premium =================
+// === Tambahkan CSS untuk Popup secara dinamis ===
+const style = document.createElement('style');
+style.innerHTML = `
+.news-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+  color: #111;
+  padding: 25px 35px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  font-size: 1.1rem;
+  font-weight: bold;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  max-width: 90%;
+  width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.news-popup.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.news-popup .close-btn {
+  cursor: pointer;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #333;
+  transition: color 0.3s, transform 0.2s;
+}
+.news-popup .close-btn:hover {
+  color: #ff0000;
+  transform: scale(1.2);
+}
+.news-popup .news-text {
+  flex: 1;
+  text-align: left;
+  margin-bottom: 10px;
+}
+@media (max-width: 768px) {
+  .news-popup {
+    width: 90%;
+    padding: 20px 25px;
+    font-size: 1rem;
+  }
+  .news-popup .close-btn {
+    font-size: 1.3rem;
+  }
+}
+`;
+document.head.appendChild(style);
+
+// === Popup Berita Persisten di Tengah ===
+async function loadNewsPopup() {
+  try {
+    const res = await fetch('/api/berita');
+    const data = await res.json();
+    if (data?.pesan) showNewsPopup(data.pesan);
+  } catch (err) {
+    console.error("❌ Tidak bisa ambil berita:", err);
+  }
+}
+
 function showNewsPopup(text) {
+  // Cek jika sudah ada popup
   if (document.querySelector('.news-popup')) return;
 
-  // ====== BACKDROP BLUR ======
-  const backdrop = document.createElement('div');
-  backdrop.className = 'popup-backdrop';
-  Object.assign(backdrop.style, {
-    position: 'fixed',
-    top: '0', left: '0',
-    width: '100%', height: '100%',
-    background: 'rgba(0,0,0,0.2)',
-    backdropFilter: 'blur(4px)',
-    zIndex: '9998',
-    opacity: '0',
-    transition: 'opacity 0.4s ease'
-  });
-  document.body.appendChild(backdrop);
-  setTimeout(() => backdrop.style.opacity = '1', 50);
-
-  // ====== POPUP ======
   const box = document.createElement('div');
   box.className = 'news-popup';
   box.innerHTML = `
-    <div style="display:flex; align-items:center; gap:15px; flex:1;">
-      <span style="font-size:2rem;">🚀</span>
-      <span style="flex:1; font-weight:600; font-size:1rem;">📰 <b>Berita:</b> ${text}</span>
-    </div>
-    <button class="popup-close">&times;</button>
+    <span class="close-btn">&times;</span>
+    <div class="news-text">📰 <b>Berita:</b> ${text}</div>
   `;
-
-  Object.assign(box.style, {
-    position: 'fixed',
-    top: '20px',
-    right: '-450px', // slide dari kanan
-    background: 'linear-gradient(135deg, #ff416c, #ff4b2b)',
-    color: '#fff',
-    borderRadius: '12px',
-    padding: '15px 20px',
-    boxShadow: '0 6px 25px rgba(0,0,0,0.35)',
-    fontSize: '1rem',
-    fontWeight: '600',
-    zIndex: '9999',
-    minWidth: '320px',
-    maxWidth: '450px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    opacity: '0',
-    transition: 'right 0.5s ease, opacity 0.5s ease'
-  });
 
   document.body.appendChild(box);
 
   // Tombol close
-  const closePopup = () => {
-    box.style.right = '-450px';
-    box.style.opacity = '0';
-    backdrop.style.opacity = '0';
-    setTimeout(() => {
-      box.remove();
-      backdrop.remove();
-    }, 500);
-  };
-  box.querySelector('.popup-close').addEventListener('click', closePopup);
-  backdrop.addEventListener('click', closePopup);
+  box.querySelector('.close-btn').addEventListener('click', () => {
+    box.remove();
+  });
 
   // Animasi masuk
-  setTimeout(() => {
-    box.style.right = '20px';
-    box.style.opacity = '1';
-  }, 100);
-
-  // Auto close setelah 8 detik
-  setTimeout(() => {
-    if (document.body.contains(box)) closePopup();
-  }, 8000);
+  setTimeout(() => box.classList.add('show'), 100);
 }
+
+// Load berita saat DOM siap
+document.addEventListener('DOMContentLoaded', loadNewsPopup);
