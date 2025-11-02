@@ -1,27 +1,22 @@
-import fs from "fs";
-import path from "path";
+// === /api/berita.js ===
+// API untuk menerima & mengirim berita dari bot WhatsApp
+
+let beritaTerbaru = "Belum ada berita saat ini."; // Disimpan sementara (RAM)
 
 export default function handler(req, res) {
-  const file = path.join(process.cwd(), "news.json");
+  if (req.method === "POST") {
+    // kirim berita baru dari bot
+    const { pesan } = req.body;
+    if (!pesan) return res.status(400).json({ error: "Pesan kosong" });
+    beritaTerbaru = pesan;
+    console.log("📰 Berita baru diterima:", pesan);
+    return res.status(200).json({ success: true, pesan });
+  }
 
-  // GET → ambil berita
   if (req.method === "GET") {
-    try {
-      const data = JSON.parse(fs.readFileSync(file, "utf8"));
-      res.status(200).json(data);
-    } catch {
-      res.status(500).json({ message: "Gagal membaca berita." });
-    }
+    // ambil berita terbaru (buat web & bot)
+    return res.status(200).json({ pesan: beritaTerbaru });
   }
 
-  // POST → ubah berita
-  else if (req.method === "POST") {
-    const { message } = req.body;
-    if (!message) return res.status(400).json({ error: "Pesan kosong." });
-
-    fs.writeFileSync(file, JSON.stringify({ message }, null, 2));
-    res.status(200).json({ message: "Berita berhasil diperbarui!" });
-  }
-
-  else res.status(405).json({ error: "Method not allowed." });
+  res.status(405).json({ error: "Metode tidak diizinkan" });
 }

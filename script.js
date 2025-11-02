@@ -37,3 +37,24 @@ function showNewsPopup(text) {
     setTimeout(() => box.remove(), 500);
   }, 7000);
 }
+ document.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const res = await fetch('/api/berita');
+    const data = await res.json();
+
+    if (data && data.berita) {
+      const alertBox = document.createElement('div');
+      alertBox.innerHTML = `
+        <div style="position:fixed; top:20px; left:50%; transform:translateX(-50%);
+                    background:#fffae6; color:#222; border:1px solid #ffd700; 
+                    padding:15px 25px; border-radius:12px; box-shadow:0 4px 10px rgba(0,0,0,0.2);
+                    font-size:1rem; font-weight:bold; z-index:9999;">
+          📰 ${data.berita}
+        </div>`;
+      document.body.appendChild(alertBox);
+      setTimeout(() => alertBox.remove(), 8000);
+    }
+  } catch (err) {
+    console.error('Gagal memuat berita:', err);
+  }
+});
