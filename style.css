@@ -67,6 +67,25 @@ header {
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
+.news-popup {
+  position: fixed;
+  top: -70px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: top 0.5s, opacity 0.4s;
+  z-index: 9999;
+}
+.news-popup.show {
+  top: 20px;
+  opacity: 1;
+}
+
 .product {
     display: flex;
     flex-wrap: wrap;

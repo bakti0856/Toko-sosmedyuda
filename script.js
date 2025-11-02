@@ -19,3 +19,21 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
    
+// === Popup Berita dari server ===
+fetch("/api/news")
+  .then(r => r.json())
+  .then(d => {
+    if (d.message) showNewsPopup(d.message);
+  });
+
+function showNewsPopup(text) {
+  const box = document.createElement("div");
+  box.className = "news-popup";
+  box.innerHTML = `📰 <b>Berita:</b> ${text}`;
+  document.body.appendChild(box);
+  setTimeout(() => box.classList.add("show"), 200);
+  setTimeout(() => {
+    box.classList.remove("show");
+    setTimeout(() => box.remove(), 500);
+  }, 7000);
+}
